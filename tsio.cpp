@@ -7,16 +7,15 @@ struct A
 
 namespace io
 {
-    void out( std::FILE* f, const A& v )
-        { std::fprintf( f, "%s", "A()" ); }
+    void out ( std::FILE* f, const A& v )
+    {
+        std::fprintf( f, "%s", "A()" );
+    }
 }
 
-
-int main( int argc, char* argv[] )
+int main ( int argc, char* argv[] )
 {
-    // io::ou( 123 )( A() ); // // ?
-    // io::pr( stderr )( "123" )( A() ); // // ?
 
-    printf( "-----------------\n" );
+    printf( "\n-----------------\n" );
     return 0;
 }
