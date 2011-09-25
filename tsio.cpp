@@ -17,9 +17,9 @@ struct MyOut : private io::out
 int main ( int argc, char* argv[] )
 {
     io::pr< MyOut > p;
-    *p( 123 )( " " )( A() )( "\n" );
+    *p( 123 )( " " )( A() )( io::nl() );
 
-    *io::ou( 123 )( "e: ёклмн" )( "\n" );
+    *io::ou( 123 )( "e: ёклмн" )( io::nl() );
 
     *io::ou1( stderr )( 123 )( "e: ёклмн" )( "\n" );
 

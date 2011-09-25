@@ -5,6 +5,14 @@
 
 namespace io
 {
+    struct nl
+    {
+    };
+
+    struct fl
+    {
+    };
+
     class out
     {
         /* (3.9.1):
@@ -33,6 +41,16 @@ namespace io
         void operator () ( std::FILE* f, const char* v )
         {
             std::fprintf( f, "%s", v );
+        }
+
+        void operator () ( std::FILE* f, const nl& )
+        {
+            std::fprintf( f, "\n" );
+        }
+
+        void operator () ( std::FILE* f, const fl& )
+        {
+            std::fflush( f );
         }
     };
 
@@ -103,7 +121,7 @@ namespace io
         return pr< >( f );
     }
 
-    template < class T >
+    template< class T >
     pr< T > ou2 ( const T& = T(), FILE* f = stdout )
     {
         return pr< T >( f );
