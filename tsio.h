@@ -6,6 +6,11 @@
 
 namespace io
 {
+    //
+    //
+    // output
+    //
+
     struct nl
     {
     };
@@ -52,21 +57,6 @@ namespace io
         void operator () ( std::FILE* f, const fl& )
         {
             std::fflush( f );
-        }
-    };
-
-    class Inp
-    {
-    public:
-        int operator () ( std::FILE* f, int* v )
-        {
-            assert( v != 0 );
-            return std::fscanf( f, "%d", v );
-        }
-        int operator () ( std::FILE* f, char* v )
-        {
-            assert( v != 0 );
-            return std::fscanf( f, "%s", v );
         }
     };
 
@@ -142,6 +132,71 @@ namespace io
     {
         return Wr< T >( f );
     }
+
+    //
+    //
+    // input
+    //
+
+    class Inp
+    {
+    public:
+        int operator () ( std::FILE* f, int* v )
+        {
+            assert( v != 0 );
+            return std::fscanf( f, "%d", v );
+        }
+        int operator () ( std::FILE* f, char* v )
+        {
+            assert( v != 0 );
+            return std::fscanf( f, "%s", v );
+        }
+    };
+
+    template< class Impl = Inp >
+    class Rd
+    {
+        FILE* f_;
+
+    public:
+        explicit Rd ( FILE* f = stdin )
+            : f_( f )
+        {
+        }
+        Rd ( const Rd& rhs )
+            : f_( rhs.f_ )
+        {
+        }
+        Rd& operator = ( const Rd& rhs )
+        {
+            if ( this != &rhs )
+                f_ = rhs.f_;
+            return *this;
+        }
+
+        template< class T >
+        Rd& operator () ( T v )
+        {
+            Impl()( f_, v );
+            return *this;
+        }
+//        void operator * ()
+//        {
+//        }
+    };
+
+
+    template< class T >
+    Rd< > in ( const T v )
+    {
+        return Rd< >( stdin )( v );
+    }
+
+    Rd< > in1 ( FILE* f )
+    {
+        return Rd< >( f );
+    }
+
 
 } // // io
 

@@ -41,9 +41,7 @@ void test_in ()
     int n = 0;
     char s[ 10 ] = "";
 
-    io::Inp i;
-    i( stdin, &n );
-    i( stdin, s );
+    io::in( &n )( s );
 
     io::ou( n )( " " )( s );
 
