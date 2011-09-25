@@ -14,7 +14,7 @@ namespace io
     {
     };
 
-    class out
+    class Out
     {
         /* (3.9.1):
          * void
@@ -55,7 +55,7 @@ namespace io
         }
     };
 
-    class in
+    class Inp
     {
     public:
         int operator () ( std::FILE* f, int* v )
@@ -93,7 +93,7 @@ namespace io
         }
     };
 
-    template< class Out = out, class Term = term_flush >
+    template< class Impl = Out, class Term = term_flush >
     class Rd
     {
         FILE* f_;
@@ -117,7 +117,7 @@ namespace io
         template< class T >
         Rd& operator () ( const T& v )
         {
-            Out()( f_, v );
+            Impl()( f_, v );
             return *this;
         }
         void operator * ()

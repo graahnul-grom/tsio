@@ -6,9 +6,9 @@ struct A
 {
 };
 
-struct MyOut : private io::out
+struct MyOut : private io::Out
 {
-    using io::out::operator();
+    using io::Out::operator();
     void operator () ( std::FILE* f, const A& v )
     {
         std::fprintf( f, "%s", "A()" );
@@ -41,7 +41,7 @@ void test_in ()
     int n = 0;
     char s[ 10 ] = "";
 
-    io::in i;
+    io::Inp i;
     i( stdin, &n );
     i( stdin, s );
 
