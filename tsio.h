@@ -94,20 +94,20 @@ namespace io
     };
 
     template< class Impl = Out, class Term = term_flush >
-    class Rd
+    class Wr
     {
         FILE* f_;
 
     public:
-        explicit Rd ( FILE* f = stdout )
+        explicit Wr ( FILE* f = stdout )
             : f_( f )
         {
         }
-        Rd ( const Rd& rhs )
+        Wr ( const Wr& rhs )
             : f_( rhs.f_ )
         {
         }
-        Rd& operator = ( const Rd& rhs )
+        Wr& operator = ( const Wr& rhs )
         {
             if ( this != &rhs )
                 f_ = rhs.f_;
@@ -115,7 +115,7 @@ namespace io
         }
 
         template< class T >
-        Rd& operator () ( const T& v )
+        Wr& operator () ( const T& v )
         {
             Impl()( f_, v );
             return *this;
@@ -127,20 +127,20 @@ namespace io
     };
 
     template< class T >
-    Rd< > ou ( const T& v )
+    Wr< > ou ( const T& v )
     {
-        return Rd< >( stdout )( v );
+        return Wr< >( stdout )( v );
     }
 
-    Rd< > ou1 ( FILE* f )
+    Wr< > ou1 ( FILE* f )
     {
-        return Rd< >( f );
+        return Wr< >( f );
     }
 
     template< class T >
-    Rd< T > ou2 ( const T& = T(), FILE* f = stdout )
+    Wr< T > ou2 ( const T& = T(), FILE* f = stdout )
     {
-        return Rd< T >( f );
+        return Wr< T >( f );
     }
 
 } // // io
