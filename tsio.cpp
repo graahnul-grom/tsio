@@ -5,16 +5,19 @@ struct A
 {
 };
 
-namespace io
+struct MyOut : private io::out
 {
-    void out ( std::FILE* f, const A& v )
+    using io::out::operator();
+    void operator () ( std::FILE* f, const A& v )
     {
         std::fprintf( f, "%s", "A()" );
     }
-}
+};
 
 int main ( int argc, char* argv[] )
 {
+    io::pr< MyOut > p( stdout );
+    p( 123 )( " " )( A() )( "\n" );
 
     printf( "\n-----------------\n" );
     return 0;

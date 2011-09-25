@@ -5,16 +5,21 @@
 
 namespace io
 {
-    void out ( std::FILE* f, const int v )
+    class out
     {
-        std::fprintf( f, "%d", v );
-    }
+    public:
+        void operator () ( std::FILE* f, const int v )
+        {
+            std::fprintf( f, "%d", v );
+        }
 
-    void out ( std::FILE* f, const char* v )
-    {
-        std::fprintf( f, "%s", v );
-    }
+        void operator () ( std::FILE* f, const char* v )
+        {
+            std::fprintf( f, "%s", v );
+        }
+    };
 
+    template< class Out = out >
     class pr
     {
         FILE* f_;
@@ -38,7 +43,7 @@ namespace io
         template< class T >
         pr& operator () ( const T& v )
         {
-            io::out( f_, v );
+            Out()( f_, v );
             return *this;
         }
 //        void operator * ()
@@ -46,9 +51,9 @@ namespace io
     };
 
     template< class T >
-    pr ou ( const T& v )
+    pr< > ou ( const T& v )
     {
-        return pr( stdout )( v );
+        return pr< >( stdout )( v );
     }
 
 } // // io
