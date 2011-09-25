@@ -19,7 +19,7 @@ void test_in ();
 
 int main ( int argc, char* argv[] )
 {
-    io::pr< MyOut > p;
+    io::Rd< MyOut > p;
     *p( 123 )( " " )( A() )( io::nl() );
 
     *io::ou( 123 )( "e: ёклмн" )( io::nl() );

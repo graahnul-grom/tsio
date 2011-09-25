@@ -2,6 +2,7 @@
 #define _DMN_TSIO_H_
 
 #include <cstdio>
+#include <cassert>
 
 namespace io
 {
@@ -59,10 +60,12 @@ namespace io
     public:
         int operator () ( std::FILE* f, int* v )
         {
+            assert( v != 0 );
             return std::fscanf( f, "%d", v );
         }
         int operator () ( std::FILE* f, char* v )
         {
+            assert( v != 0 );
             return std::fscanf( f, "%s", v );
         }
     };
@@ -91,20 +94,20 @@ namespace io
     };
 
     template< class Out = out, class Term = term_flush >
-    class pr
+    class Rd
     {
         FILE* f_;
 
     public:
-        explicit pr ( FILE* f = stdout )
+        explicit Rd ( FILE* f = stdout )
             : f_( f )
         {
         }
-        pr ( const pr& rhs )
+        Rd ( const Rd& rhs )
             : f_( rhs.f_ )
         {
         }
-        pr& operator = ( const pr& rhs )
+        Rd& operator = ( const Rd& rhs )
         {
             if ( this != &rhs )
                 f_ = rhs.f_;
@@ -112,7 +115,7 @@ namespace io
         }
 
         template< class T >
-        pr& operator () ( const T& v )
+        Rd& operator () ( const T& v )
         {
             Out()( f_, v );
             return *this;
@@ -124,20 +127,20 @@ namespace io
     };
 
     template< class T >
-    pr< > ou ( const T& v )
+    Rd< > ou ( const T& v )
     {
-        return pr< >( stdout )( v );
+        return Rd< >( stdout )( v );
     }
 
-    pr< > ou1 ( FILE* f )
+    Rd< > ou1 ( FILE* f )
     {
-        return pr< >( f );
+        return Rd< >( f );
     }
 
     template< class T >
-    pr< T > ou2 ( const T& = T(), FILE* f = stdout )
+    Rd< T > ou2 ( const T& = T(), FILE* f = stdout )
     {
-        return pr< T >( f );
+        return Rd< T >( f );
     }
 
 } // // io
