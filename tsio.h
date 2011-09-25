@@ -54,6 +54,19 @@ namespace io
         }
     };
 
+    class in
+    {
+    public:
+        int operator () ( std::FILE* f, int* v )
+        {
+            return std::fscanf( f, "%d", v );
+        }
+        int operator () ( std::FILE* f, char* v )
+        {
+            return std::fscanf( f, "%s", v );
+        }
+    };
+
     struct term_nop
     {
         void operator () ( std::FILE* )

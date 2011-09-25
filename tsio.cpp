@@ -1,5 +1,6 @@
 #include "tsio.h"
 #include <cstdio>
+#include <cstring>
 
 struct A
 {
@@ -14,6 +15,8 @@ struct MyOut : private io::out
     }
 };
 
+void test_in ();
+
 int main ( int argc, char* argv[] )
 {
     io::pr< MyOut > p;
@@ -25,6 +28,23 @@ int main ( int argc, char* argv[] )
 
     *io::ou2( MyOut() )( 123 )( "o: ёклмн" )( "\n" );
 
-    printf( "\n-----------------\n" );
+    *io::ou( "\n-----------------\n" );
+
+    test_in();
+
+    *io::ou( "\n-----------------\n" );
     return 0;
+}
+
+void test_in ()
+{
+    int n = 0;
+    char s[ 10 ] = "";
+
+    io::in i;
+    i( stdin, &n );
+    i( stdin, s );
+
+    io::ou( n )( " " )( s );
+
 }
