@@ -83,7 +83,7 @@ namespace io
         }
     };
 
-    template< class Impl = Out, class Term = term_flush >
+    template< class Impl = Out, class Term = term_nl >
     class Wr
     {
         FILE* f_;
@@ -195,6 +195,12 @@ namespace io
     Rd< > in1 ( FILE* f )
     {
         return Rd< >( f );
+    }
+
+    template< class T >
+    Rd< T > in2 ( const T& = T(), FILE* f = stdin )
+    {
+        return Rd< T >( f );
     }
 
 
