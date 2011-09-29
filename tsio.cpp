@@ -61,7 +61,7 @@ struct MyOut : private io::Out
     using io::Out::operator();
     void operator () ( std::FILE* f, const A& v )
     {
-        std::fprintf( f, "[ A: %d, %s ]", v.getn(), v.gets() );
+        io::wr1( f )( "A: ")( v.getn() )( ", [" )( v.gets() )( "]" );
     }
 };
 
@@ -70,24 +70,26 @@ void test_scanf ();
 void test_out ()
 {
     io::Wr< MyOut > p;
-    *p( 123 )( " " )( A( 123, "abcde" ) );
+    *p( 123 )( " " )( A( 123, "abcde" ) )( io::fl() );
 
-    *io::ou( 123 )( " e: ёклмн" );
+    *io::wr( 123 )( " o: ёклмн" )( io::fl() );
 
-    *io::ou1( stderr )( 123 )( " e: ёклмн" );
+    *io::wr1( stderr )( 123 )( " e: ёклмн" );
 
-    *io::ou2( MyOut() )( 123 )( " o: ёклмн" );
+    *io::wr2( MyOut() )( 123 )( " o: ёклмн" )( io::fl() );
 
-    *io::ou( "\n-----------------\n" );
+    *io::wr( "\n-----------------\n" );
+
+    *io::wr( io::fl() );
 }
 
 int main ( int argc, char* argv[] )
 {
-//    test_out();
+    test_out();
     test_in();
 //    test_scanf();
 
-    *io::ou( "\n-----------------\n" );
+    *io::wr( "\n-----------------\n" );
     return 0;
 }
 
@@ -101,8 +103,8 @@ struct MyInp : private io::Inp
         int n = -1;
         char s[ A::sz ];
 
-        io::in1( f )( &n );
-        io::in1( f )( s, A::len );
+        io::rd1( f )( &n );
+        io::rd1( f )( s, A::len );
 
         v->setn( n );
         v->sets( s );
@@ -115,13 +117,13 @@ void test_in ()
     char s[ 3 ] = "";
     int i = 0;
 
-    in( s, sizeof( s ) - 1 )( &i );
-    *ou( s );
-    *ou( i );
+    rd( s, sizeof( s ) - 1 )( &i );
+    *wr( s );
+    *wr( i );
 
     A a;
-    in2< MyInp >()( &a );
-    ou2< MyOut >()( a );
+    rd2< MyInp >()( &a );
+    wr2< MyOut >()( a );
 
 }
 

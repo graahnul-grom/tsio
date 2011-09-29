@@ -4,7 +4,6 @@
 #include <cstdio>
 #include <cassert>
 
-
 namespace io
 {
     //
@@ -118,20 +117,20 @@ namespace io
     };
 
     template< class T >
-    Wr< > ou ( const T& v )
+    Wr< > wr ( const T& v )
     {
         return Wr< >( stdout )( v );
     }
 
-    Wr< > ou1 ( FILE* f )
+    Wr< > wr1 ( FILE* f )
     {
         return Wr< >( f );
     }
 
-    template< class T >
-    Wr< T > ou2 ( const T& = T(), FILE* f = stdout )
+    template< class Impl >
+    Wr< Impl > wr2 ( const Impl& = Impl(), FILE* f = stdout )
     {
-        return Wr< T >( f );
+        return Wr< Impl >( f );
     }
 
     //
@@ -141,10 +140,13 @@ namespace io
 
     class Inp
     {
-        enum { fmtsz = 128 };
+        enum
+        {
+            fmtsz = 128
+        };
 
     public:
-        int operator () ( std::FILE* f, int* v, unsigned long width = 0)
+        int operator () ( std::FILE* f, int* v, unsigned long width = 0 )
         {
             assert( v != 0 );
 
@@ -154,6 +156,7 @@ namespace io
 
             return std::fscanf( f, fmt, v );
         }
+
         int operator () ( std::FILE* f, char* v, unsigned long width )
         {
             assert( v != 0 );
@@ -198,20 +201,20 @@ namespace io
     };
 
     template< class T >
-    Rd< > in ( T v, long width = 0 )
+    Rd< > rd ( T v, long width = 0 )
     {
         return Rd< >( stdin )( v, width );
     }
 
-    Rd< > in1 ( FILE* f )
+    Rd< > rd1 ( FILE* f )
     {
         return Rd< >( f );
     }
 
-    template< class T >
-    Rd< T > in2 ( const T& = T(), FILE* f = stdin )
+    template< class Impl >
+    Rd< Impl > rd2 ( const Impl& = Impl(), FILE* f = stdin )
     {
-        return Rd< T >( f );
+        return Rd< Impl >( f );
     }
 
 } // // io
