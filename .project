@@ -76,4 +76,16 @@
 		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>libc</name>
+			<type>2</type>
+			<location>/s/src/lib/libc</location>
+		</link>
+		<link>
+			<name>libstdc++</name>
+			<type>2</type>
+			<location>/s/src/contrib/libstdc++</location>
+		</link>
+	</linkedResources>
 </projectDescription>

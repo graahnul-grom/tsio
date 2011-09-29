@@ -8,7 +8,7 @@ class A
 public:
     enum
     {
-        sz = 3
+        sz = 3, len = sz - 1
     };
 
 private:
@@ -67,8 +67,7 @@ struct MyOut : private io::Out
 
 void test_in ();
 void test_scanf ();
-
-int main ( int argc, char* argv[] )
+void test_out ()
 {
     io::Wr< MyOut > p;
     *p( 123 )( " " )( A( 123, "abcde" ) );
@@ -80,74 +79,58 @@ int main ( int argc, char* argv[] )
     *io::ou2( MyOut() )( 123 )( " o: ёклмн" );
 
     *io::ou( "\n-----------------\n" );
+}
 
+int main ( int argc, char* argv[] )
+{
+//    test_out();
     test_in();
+//    test_scanf();
 
     *io::ou( "\n-----------------\n" );
     return 0;
 }
 
-struct MyInp0 : private io::Inp
-{
-    using io::Inp::operator();
-    void operator () ( std::FILE* f, A* v )
-    {
-        assert( v );
-
-        int n = -1;
-        char s[ A::sz ];
-        char fmt[] = "%d %2s";
-
-        int res = std::fscanf( f, fmt, &n, s );
-
-        *io::ou( "fscanf() res: [" )( fmt )( "] " )( res )( " " )( n )( " " )( s );
-
-        v->setn( n );
-        v->sets( s );
-
-        *io::ou( "A: " )( v->getn() )( " " )( v->gets() );
-    }
-};
-
 struct MyInp : private io::Inp
 {
     using io::Inp::operator();
-    void operator () ( std::FILE* f, A* v )
+    void operator () ( std::FILE* f, A* v, unsigned long = 0 )
     {
         assert( v );
 
         int n = -1;
         char s[ A::sz ];
 
-        // NOTE: the correct way to handle field sizes:
-        //
-        char fmt[ 128 ] = "";
-        sprintf( fmt, "%%%dd %%%ds", std::numeric_limits< int >::digits, A::sz
-            - 1 );
-
-        int res = std::fscanf( f, fmt, &n, s );
-
-        *io::ou( "fscanf() res: [" )( fmt )( "] " )( res )( " " )( n )( " " )( s );
+        io::in1( f )( &n );
+        io::in1( f )( s, A::len );
 
         v->setn( n );
         v->sets( s );
-
-        *io::ou( "A: " )( v->getn() )( " " )( v->gets() );
     }
 };
 
 void test_in ()
 {
-    int n = 0;
-    char s[ 5 ] = "";
+    using namespace io;
+    char s[ 3 ] = "";
+    int i = 0;
+
+    in( s, sizeof( s ) - 1 )( &i );
+    *ou( s );
+    *ou( i );
 
     A a;
-    io::Rd< MyInp0 > r;
-    r( &a )( s )( &n );
-    *io::ou2( MyOut() )( a )( " [" )( s )( "] [" )( n )( "]" );
+    in2< MyInp >()( &a );
+    ou2< MyOut >()( a );
 
 }
 
 void test_scanf ()
 {
+    using namespace io;
+    char s[ 3 ] = "";
+
+    int res0 = fscanf( stdin, "%2s", s );
+    printf( "res: %d, err: %d, eof: %d\n", res0, ferror( stdin ), feof( stdin ) );
+    printf( "string: [%s], len: %d\n", s, strlen( s ) );
 }

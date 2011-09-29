@@ -4,6 +4,7 @@
 #include <cstdio>
 #include <cassert>
 
+
 namespace io
 {
     //
@@ -140,16 +141,27 @@ namespace io
 
     class Inp
     {
+        enum { fmtsz = 128 };
+
     public:
-        int operator () ( std::FILE* f, int* v )
+        int operator () ( std::FILE* f, int* v, unsigned long width = 0)
         {
             assert( v != 0 );
-            return std::fscanf( f, "%d", v );
+
+            char fmt[ fmtsz ] = "%d";
+            if ( width > 0 )
+                sprintf( fmt, "%%%ldd", width );
+
+            return std::fscanf( f, fmt, v );
         }
-        int operator () ( std::FILE* f, char* v )
+        int operator () ( std::FILE* f, char* v, unsigned long width )
         {
             assert( v != 0 );
-            return std::fscanf( f, "%s", v );
+
+            char fmt[ fmtsz ] = "";
+            sprintf( fmt, "%%%lds", width );
+
+            return std::fscanf( f, fmt, v );
         }
     };
 
@@ -175,9 +187,9 @@ namespace io
         }
 
         template< class T >
-        Rd& operator () ( T v )
+        Rd& operator () ( T v, long width = 0 )
         {
-            Impl()( f_, v );
+            Impl()( f_, v, width );
             return *this;
         }
 //        void operator * ()
@@ -185,11 +197,10 @@ namespace io
 //        }
     };
 
-
     template< class T >
-    Rd< > in ( const T v )
+    Rd< > in ( T v, long width = 0 )
     {
-        return Rd< >( stdin )( v );
+        return Rd< >( stdin )( v, width );
     }
 
     Rd< > in1 ( FILE* f )
@@ -202,7 +213,6 @@ namespace io
     {
         return Rd< T >( f );
     }
-
 
 } // // io
 
