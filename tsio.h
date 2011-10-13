@@ -122,7 +122,7 @@ namespace io
         return Wr< >( stdout )( v );
     }
 
-    Wr< > wr1 ( FILE* f )
+    inline Wr< > wr1 ( FILE* f )
     {
         return Wr< >( f );
     }
@@ -206,7 +206,7 @@ namespace io
         return Rd< >( stdin )( v, width );
     }
 
-    Rd< > rd1 ( FILE* f )
+    inline Rd< > rd1 ( FILE* f )
     {
         return Rd< >( f );
     }
