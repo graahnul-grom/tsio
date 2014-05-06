@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <cstring>
 #include <limits>
+#include <cstdlib>
 
 class A
 {
@@ -77,7 +78,11 @@ void test_out ()
     *io::wr1( stderr )( 123 )( " e: ёклмн" );
 
     *io::wr2( MyOut() )( 123 )( " o: ёклмн" )( io::fl() );
+    
+    
+    *io::wr2( MyOut() )( 123 )( " o: ЁКЛМН!" )( io::fl() );
 
+    
     *io::wr( "\n-----------------\n" );
 
     *io::wr( io::fl() );
@@ -85,8 +90,17 @@ void test_out ()
 
 int main ( int argc, char* argv[] )
 {
+    
+    
+    char* e = getenv( "LANG" );
+    if ( e )
+        *io::wr( e )( "\n" );
+    e = getenv( "SHELL" );
+    if ( e )
+        *io::wr( e )( "\n" );
+    
     test_out();
-    test_in();
+//    test_in();
 //    test_scanf();
 
     *io::wr( "\n-----------------\n" );
