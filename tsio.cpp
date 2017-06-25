@@ -3,6 +3,8 @@
 #include <cstring>
 #include <limits>
 #include <cstdlib>
+#include <cassert>
+
 
 class A
 {
@@ -55,57 +57,42 @@ public:
         std::strncpy( s_, s, sizeof( s_ ) );
         s_[ sizeof( s_ ) - 1 ] = '\0';
     }
-};
 
-struct MyOut : private io::Out
-{
-    using io::Out::operator();
-    void operator () ( std::FILE* f, const A& v )
-    {
-        io::wr1( f )( "A: ")( v.getn() )( ", [" )( v.gets() )( "]" );
-    }
-};
+}; // class A
 
-void test_in ();
-void test_scanf ();
-void test_out ()
-{
-    io::Wr< MyOut > p;
-    *p( 123 )( " " )( A( 123, "abcde" ) )( io::fl() );
 
-    *io::wr( 123 )( " o: ёклмн" )( io::fl() );
 
-    *io::wr1( stderr )( 123 )( " e: ёклмн" );
 
-    *io::wr2( MyOut() )( 123 )( " o: ёклмн" )( io::fl() );
-    
-    
-    *io::wr2( MyOut() )( 123 )( " o: ЁКЛМН!" )( io::fl() );
+void test_in();
+void test_scanf();
+void test_out();
 
-    
-    *io::wr( "\n-----------------\n" );
 
-    *io::wr( io::fl() );
-}
+
+// --------------------------------
+//
 
 int main ( int argc, char* argv[] )
 {
-    
-    
     char* e = getenv( "LANG" );
     if ( e )
         *io::wr( e )( "\n" );
     e = getenv( "SHELL" );
     if ( e )
         *io::wr( e )( "\n" );
-    
+
     test_out();
-//    test_in();
-//    test_scanf();
+    // test_in();
+    // test_scanf();
 
     *io::wr( "\n-----------------\n" );
     return 0;
 }
+
+//
+// --------------------------------
+
+
 
 struct MyInp : private io::Inp
 {
@@ -125,7 +112,19 @@ struct MyInp : private io::Inp
     }
 };
 
-void test_in ()
+
+struct MyOut : private io::Out
+{
+    using io::Out::operator();
+    void operator () ( std::FILE* f, const A& v )
+    {
+        io::wr1( f )( "A: ")( v.getn() )( ", [" )( v.gets() )( "]" );
+    }
+};
+
+
+
+void test_in()
 {
     using namespace io;
     char s[ 3 ] = "";
@@ -138,15 +137,39 @@ void test_in ()
     A a;
     rd2< MyInp >()( &a );
     wr2< MyOut >()( a );
-
 }
 
-void test_scanf ()
+
+
+void test_scanf()
 {
     using namespace io;
     char s[ 3 ] = "";
 
     int res0 = fscanf( stdin, "%2s", s );
     printf( "res: %d, err: %d, eof: %d\n", res0, ferror( stdin ), feof( stdin ) );
-    printf( "string: [%s], len: %d\n", s, strlen( s ) );
+    printf( "string: [%s], len: %lu\n", s, strlen( s ) );
 }
+
+
+
+void test_out()
+{
+    io::Wr< MyOut > p;
+    *p( 123 )( " " )( A( 123, "abcde" ) )( io::fl() );
+
+    *io::wr( 123 )( " o: ёклмн" )( io::fl() );
+
+    *io::wr1( stderr )( 123 )( " e: ёклмн" );
+
+    *io::wr2( MyOut() )( 123 )( " o: ёклмн" )( io::fl() );
+
+
+    *io::wr2( MyOut() )( 123 )( " o: ЁКЛМН!" )( io::fl() );
+
+
+    *io::wr( "\n-----------------\n" );
+
+    *io::wr( io::fl() );
+}
+

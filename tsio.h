@@ -21,7 +21,8 @@ namespace io
 
     class Out
     {
-        /* (3.9.1):
+        /** C++2003 (3.9.1):
+         *
          * void
          * bool
          * wchar_t
@@ -37,7 +38,7 @@ namespace io
          * double
          * long double
          *
-         * */
+         **/
     public:
         void operator () ( std::FILE* f, const int v )
         {
@@ -220,3 +221,4 @@ namespace io
 } // // io
 
 #endif //
+
